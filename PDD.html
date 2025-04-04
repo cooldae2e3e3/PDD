@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDD</title>
+<body>
+
+    <div class="interactive-link-container">
+        <!-- The entire box is a link, but JS will intercept the click -->
+        <a href="https://www.roblox.com/games/117628856691810/PLS-DONATE-D" target="_blank" class="interactive-link-box" id="pddLinkBox">
+            <span class="box-trigger" id="pddTriggerText">PDD</span>
+        </a>
+    </div>
+
+    <script>
+        // Get references to the link box and the text element
+        const linkBox = document.getElementById('pddLinkBox');
+        const triggerText = document.getElementById('pddTriggerText');
+        const redirectUrl = linkBox.href; // Get the URL from the href attribute
+
+        // Add a click event listener to the link box
+        linkBox.addEventListener('click', function(event) {
+            // 1. Prevent the default link behavior (immediate navigation)
+            event.preventDefault();
+
+            // 2. Change the text content
+            triggerText.textContent = 'Redirecting...';
+
+            // 3. Add a class to the box for styling the redirecting state
+            linkBox.classList.add('is-redirecting');
+
+            // 4. Set a timeout to wait before actually redirecting (e.g., 1500ms = 1.5 seconds)
+            setTimeout(() => {
+                // 5. Navigate to the URL after the delay
+                window.location.href = redirectUrl;
+            }, 1500); 
+        });
+    </script>
+
+
+<style>
+        /* --- Global Styles & Setup --- */
+        :root {
+            --primary-glow: rgba(180, 120, 255, 0.7); /* Lilac/Purple glow */
+            --secondary-glow: rgba(100, 200, 255, 0.6); /* Light Blue glow */
+            --tertiary-color: rgba(80, 250, 180, 0.6); /* Minty Green */
+            --bg-color: #1a1a2e; /* Dark background for contrast */
+            --box-bg: rgba(255, 255, 255, 0.08); /* Very subtle semi-transparent white */
+            --box-border: rgba(255, 255, 255, 0.15);
+            --text-color: #f0f0f0;
+            --highlight-text: #ffffff;
+            --redirect-text-color: #b0c0ff; /* Softer color for redirect message */
+            --transition-speed: 0.4s;
+            --bounce-easing: cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Nice bounce */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%); /* Dark space gradient */
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        /* --- The Link Box Container --- */
+        .interactive-link-container {
+            perspective: 1200px; /* Enhanced 3D effect */
+        }
+
+        /* --- The Clickable Link Box (<a> tag) --- */
+        .interactive-link-box {
+            position: relative; /* Needed for pseudo-elements/positioning */
+            display: flex; /* Use flexbox to center content */
+            justify-content: center;
+            align-items: center;
+            width: 160px; /* Slightly wider */
+            height: 160px; /* Slightly taller */
+            background: var(--box-bg);
+            border: 1px solid var(--box-border);
+            border-radius: 40px; /* More rounded */
+            cursor: pointer;
+            overflow: hidden; /* Important */
+            backdrop-filter: blur(20px) saturate(180%); /* Stronger Glassmorphism */
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow:
+                0 8px 32px 0 rgba(31, 38, 135, 0.2), /* Base shadow */
+                inset 0 0 15px rgba(255, 255, 255, 0.05); /* Subtle inner glow */
+            transition:
+                transform var(--transition-speed) var(--bounce-easing),
+                box-shadow var(--transition-speed) ease-out,
+                background var(--transition-speed) ease;
+            user-select: none; /* Prevent text selection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            text-decoration: none; /* Remove default link underline */
+            color: inherit; /* Inherit text color */
+            transform-style: preserve-3d; /* Allows children to be transformed in 3D */
+        }
+
+        /* --- Hover Effect --- */
+        .interactive-link-box:not(.is-redirecting):hover { /* Don't apply hover when redirecting */
+            transform: scale(1.1) rotateY(8deg) rotateX(-3deg); /* More dynamic 3D tilt */
+            box-shadow:
+                0 15px 50px 0 rgba(var(--primary-glow), 0.5), /* Outer glow */
+                inset 0 0 25px rgba(var(--secondary-glow), 0.3), /* Inner glow enhance */
+                0 0 30px rgba(var(--tertiary-color), 0.2); /* Subtle third color glow */
+            background: rgba(255, 255, 255, 0.12); /* Slightly lighten background */
+        }
+
+        /* --- Active (Pressed) Effect --- */
+        .interactive-link-box:not(.is-redirecting):active {
+            transform: scale(1.05); /* Slightly smaller scale when pressed */
+            box-shadow:
+                0 5px 20px 0 rgba(var(--primary-glow), 0.4), /* Reduced outer glow */
+                inset 0 0 10px rgba(0, 0, 0, 0.2); /* Inner shadow press effect */
+            transition-duration: 0.1s; /* Faster transition for press */
+        }
+
+        /* --- Trigger Text ("PDD" / "Redirecting...") --- */
+        .box-trigger {
+            font-size: 3.2rem; /* Larger text */
+            font-weight: 700; /* Bolder */
+            color: var(--highlight-text);
+            /* Multi-layered text shadow for depth */
+            text-shadow:
+                0 0 8px var(--secondary-glow),
+                0 0 15px var(--primary-glow),
+                0 0 25px rgba(var(--tertiary-color), 0.5);
+            transition: transform var(--transition-speed) var(--bounce-easing), text-shadow 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+            position: relative; /* Allows z-index or transform */
+            z-index: 1;
+            text-align: center; /* Ensure text centers if it wraps (like Redirecting...) */
+            line-height: 1.2; /* Adjust line height if needed */
+            /* Prevent text from looking flat during rotation */
+            transform: translateZ(20px);
+        }
+
+        /* Enhance text on hover */
+        .interactive-link-box:not(.is-redirecting):hover .box-trigger {
+            transform: translateZ(35px) scale(1.05); /* Push text forward and scale slightly */
+             text-shadow:
+                 0 0 12px var(--secondary-glow),
+                 0 0 25px var(--primary-glow),
+                 0 0 40px rgba(var(--tertiary-color), 0.7);
+        }
+
+        /* --- Styles for the Redirecting State --- */
+        .interactive-link-box.is-redirecting {
+            /* Keep the pressed state visually */
+            transform: scale(1.05);
+            box-shadow:
+                0 5px 20px 0 rgba(var(--primary-glow), 0.4),
+                inset 0 0 10px rgba(0, 0, 0, 0.2);
+            cursor: default; /* Indicate no further action */
+        }
+
+        .interactive-link-box.is-redirecting .box-trigger {
+            font-size: 1.6rem; /* Smaller text for "Redirecting..." */
+            font-weight: 500;
+            color: var(--redirect-text-color);
+            text-shadow: 0 0 5px rgba(var(--primary-glow), 0.5); /* Simpler shadow */
+            transform: translateZ(10px); /* Pull back slightly */
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        /* Simple pulse animation for redirect text */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+    </style>
+
+
+</body>
+</html>
